@@ -1,7 +1,18 @@
-// RUN THIS IN NASHORN to polyfill setTimeout(), Set and Map.
-// A basic level of polyfilling has already been done in Nashorn by React4xp 
-// by the time it runs the following code (transpiled).
-// So some basics are expected to already be polyfilled: exports, global, window, process, console.
+// COMPILE AND RUN IN NASHORN
+
+// Basic polyfilling (exports, global, window, process, console)
+// must be run hardcoded from inside the engine, for some reason:
+/*if (typeof exports === 'undefined') { var exports = {}; }
+if (typeof global === 'undefined') { var global = this; }
+if (typeof window === 'undefined') { var window = this; }
+if (typeof process === 'undefined') { var process = {env:{}}; }
+if (typeof console === 'undefined') { var console = {}; }
+console.debug = print;
+console.log = print;
+console.warn = print;
+console.error = print;
+*/
+
 
 // Polyfills Set and Map:
 var Map = require( 'es6-set-and-map' ).map;
@@ -13,7 +24,7 @@ var Set = require( 'es6-set-and-map' ).set;
 
 
 
- 
+// polyfills setTimeout() and related
 // Based on:
 // https://gist.github.com/josmardias/20493bd205e24e31c0a406472330515a
 //
