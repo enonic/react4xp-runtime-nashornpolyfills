@@ -1,18 +1,23 @@
 {
     "name": "react4xp-runtime-nashornpolyfills",
-    "version": "0.0.6",
+    "version": "0.0.9",
     "description": "Source code and webpack compile script for produces a JS file which, when run in Nashorn, will polyfill Nashorn with some necessary functionality for running React4xp's server-side rendering of react components.",
     "main": "webpack.config.js",
     "files": [
-        "lib/nashornpolyfills.js",
-        "lib/nashornpolyfills.es6",
-        "lib/webpack.config.js"
+        "nashornPolyfills.js",
+        "nashornPolyfills.es6",
+        "webpack.config.js",
+        "README.md"
     ],
     "scripts": {
-        "clean": "rimraf lib",
-        "cpjs": "copyfiles --flat src/*.* lib",
-        "compile": "babel src -d lib --ignore \"webpack.config.js\" --no-comments",
-        "checkall": "npm run clean && npm run compile && npm run cpjs"
+        "clean": "npm run cleanCompiled && npm run cleanRaw && npm run cleanWebpack",
+        "cleanCompiled": "rimraf ./nashornpolyfills.js",
+        "cleanRaw": "rimraf ./nashornpolyfills.es6",
+        "cleanWebpack": "rimraf ./webpack.config.js",
+        "copy": "copyfiles --flat src/*.* .",
+        "compile": "babel src -d . --ignore \"webpack.config.js\" --no-comments",
+        "prepublish": "npm run clean && npm run compile && npm run copy",
+        "postpublish": "npm run clean"
     },
     "repository": {
         "type": "git",

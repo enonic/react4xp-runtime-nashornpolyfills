@@ -2,7 +2,8 @@
 
 // Basic polyfilling (exports, global, window, process, console)
 // must be run hardcoded from inside the engine, for some reason:
-/*if (typeof exports === 'undefined') { var exports = {}; }
+/*
+if (typeof exports === 'undefined') { var exports = {}; }
 if (typeof global === 'undefined') { var global = this; }
 if (typeof window === 'undefined') { var window = this; }
 if (typeof process === 'undefined') { var process = {env:{}}; }

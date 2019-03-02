@@ -31,6 +31,12 @@ Temporary Items
 ### Output ###
 lib/
 test/output/
+nashornpolyfills.js
+nashornpolyfills.es6
+webpack.config.js
+!src/nashornPolyfills.js
+!src/nashornPolyfills.es6
+!src/webpack.config.js
 
 # Ignore Gradle GUI config
 gradle-app.setting

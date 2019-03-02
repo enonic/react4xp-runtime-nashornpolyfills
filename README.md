@@ -19,7 +19,7 @@ npm add --save-dev react4xp-runtime-nashornpolyfills
 
 ## Usage
 
-Intended for use in several ways, depending on your needs. Note that the two `nashornPolyfills` files under the `/lib` folder (in `node_modules/react4xp-runtime-nashornpolyfills/`) are meant to be used in different ways: 
+Intended for use in several ways, depending on your needs. Note that the two `nashornPolyfills` files (in `node_modules/react4xp-runtime-nashornpolyfills/` after installation) are meant to be used in different ways: 
 
   - `nashornPolyfills.js` is pre-compiled and ready to run in Nashorn, just copy it to where you need it and run it, or even add more ready-to-run JS code if you have more polyfilling needs.
 
@@ -32,10 +32,10 @@ The ES6 file `nashornPolyfills.es6` can be compiled in regular ways, such as Web
 Here are a few ways to use it easily with webpack. Generally, run webpack from the project folder, directly on the webpack.config script, as installed with NPM as above:
 
 ```bash
-webpack --config node_modules/react4xp-runtime-nashornpolyfills/lib/webpack.config.js
+webpack --config node_modules/react4xp-runtime-nashornpolyfills/webpack.config.js
 ```
 
-This will output the nashorn-runnable JS file `nashornPolyfills` in a generic new `/build` folder under `node_modules/react4xp-runtime-nashornpolyfills/lib/`. 
+This will output the nashorn-runnable JS file `nashornPolyfills` in a generic new `/build` folder under `node_modules/react4xp-runtime-nashornpolyfills`. 
 
 
 #### Control the output location with `env.BUILD_PATH`
@@ -43,7 +43,7 @@ This will output the nashorn-runnable JS file `nashornPolyfills` in a generic ne
 Inserting an absolute path in a `BUILD_PATH` webpack environment variable, controls the output location:
 
 ```bash
-webpack --config node_modules/react4xp-runtime-nashornpolyfills/lib/webpack.config.js --env.BUILD_PATH=/me/myproject/build
+webpack --config node_modules/react4xp-runtime-nashornpolyfills/webpack.config.js --env.BUILD_PATH=/me/myproject/build
 ```
 
 ...will produce the file `/me/myproject/build/nashornPolyfills.js`.
@@ -61,7 +61,7 @@ If the file contents in `/me/myproject/config.json` look something like this...
 ...then running...
 
 ```bash
-webpack --config node_modules/react4xp-runtime-nashornpolyfills/lib/webpack.config.js --env.REACT4XP_CONFIG_FILE=/me/myproject/config.json
+webpack --config node_modules/react4xp-runtime-nashornpolyfills/webpack.config.js --env.REACT4XP_CONFIG_FILE=/me/myproject/config.json
 ```
 
 ...will produce `/me/myproject/build/nashornPolyfills.js`.
