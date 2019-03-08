@@ -7,24 +7,34 @@ module.exports = env => {
 
     let BUILD_R4X;
     let BUILD_ENV;
+    let NASHORNPOLYFILLS_FILENAME;
 
     if (env.REACT4XP_CONFIG_FILE) {
         try {
             const config = require(env.REACT4XP_CONFIG_FILE);
-            BUILD_R4X = config.BUILD_R4X;
+            BUILD_R4X = env.BUILD_R4X || config.BUILD_R4X;
             BUILD_ENV = config.BUILD_ENV;
+            NASHORNPOLYFILLS_FILENAME = config.NASHORNPOLYFILLS_FILENAME;
         } catch (e) {}
+    }
+
+    if (((BUILD_R4X || "") + "").trim() === "") {
+        throw Error("Can't build nashorn polyfills without a build path (BUILD_R4X)");
+    }
+
+    if (((NASHORNPOLYFILLS_FILENAME || "") + "").trim() === "") {
+        throw Error("Won't build nashorn polyfills without a target filename (NASHORNPOLYFILLS_FILENAME)");
     }
 
     return {
         mode: BUILD_ENV || 'production',
 
         entry: {
-            'nashornPolyfills': path.join(__dirname, 'nashornPolyfills.es6'),
+            [NASHORNPOLYFILLS_FILENAME]: path.join(__dirname, 'nashornPolyfills.es6'),
         },
 
         output: {
-            path: env.BUILD_PATH || BUILD_R4X || path.join(__dirname, "build"),
+            path: BUILD_R4X,
             filename: "[name].js",
         },
 
