@@ -5,15 +5,17 @@ const path = require('path');
 module.exports = env => {
     env = env || {};
 
-    let BUILD_R4X;
-    let BUILD_ENV;
-    let NASHORNPOLYFILLS_FILENAME;
+    let BUILD_R4X = env.BUILD_R4X;
+    let BUILD_ENV = env.BUILD_ENV || "development";
+    let NASHORNPOLYFILLS_FILENAME = env.NASHORNPOLYFILLS_FILENAME;
+
+    const SOURCE = env.SOURCE || path.join(__dirname, 'nashornPolyfills.es6');
 
     if (env.REACT4XP_CONFIG_FILE) {
         try {
             const config = require(env.REACT4XP_CONFIG_FILE);
-            BUILD_R4X = env.BUILD_R4X || config.BUILD_R4X;
-            BUILD_ENV = config.BUILD_ENV;
+            BUILD_R4X = BUILD_R4X || config.BUILD_R4X;
+            BUILD_ENV = BUILD_ENV || config.BUILD_ENV;
             NASHORNPOLYFILLS_FILENAME = config.NASHORNPOLYFILLS_FILENAME;
         } catch (e) {}
     }
@@ -30,7 +32,7 @@ module.exports = env => {
         mode: BUILD_ENV || 'production',
 
         entry: {
-            [NASHORNPOLYFILLS_FILENAME]: path.join(__dirname, 'nashornPolyfills.es6'),
+            [NASHORNPOLYFILLS_FILENAME]: SOURCE,
         },
 
         output: {

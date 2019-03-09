@@ -1,8 +1,12 @@
 # react4xp-runtime-nashornpolyfills
 
-JS file (and source/build code for producing it) which, when run in Nashorn, will polyfill Nashorn with some necessary functionality for running React4xp's server-side rendering of react components, notably: Set, Map and setTimeout, and related. 
+Builds a JS file ready to run in Nashorn, which polyfills the Nashorn engine with some JS functionality needed for server-side React rendering. Notably: Set, Map and setTimeout, and related. 
 
+The [React4xp runtime library](https://github.com/enonic/lib-react4xp-runtime) already includes a hook to this library, handling its own polyfilling. 
 
+However, should you need to **adjust or add your own polyfilling**, you can use the included `nashornPolyfills.es6` file as a template, and follow the description below to _override and replace_ React4xp's own Nashorn polyfill. 
+ 
+ 
 ## Installation
 
 ```bash
@@ -11,23 +15,27 @@ npm add --save-dev react4xp-runtime-nashornpolyfills
 
 ## Usage
 
-Intended for use in several ways, depending on your needs. Note that the two `nashornPolyfills` files (in `node_modules/react4xp-runtime-nashornpolyfills/` after installation) can be used in two different ways: 
-
-  - `nashornPolyfills.js` is pre-compiled and ready to run in Nashorn, just copy it to where you need it and run it, or even add more ready-to-run JS code if you have more polyfilling needs.
-
-  - `nashornPolyfills.es6` is uncompiled ES6 code. Can of course also be used as a pre-compilation template to add your own code to.
-
-### Compiling
-
-Generally, compile the ES6 file `nashornPolyfills.es6` with webpack from the project folder, directly on the `webpack.config.js` script, as installed with NPM as above:
-
-```bash
-webpack --config node_modules/react4xp-runtime-nashornpolyfills/webpack.config.js --env.REACT4XP_CONFIG_FILE=/me/myproject/react4xpConfig.json
+```
+webpack --config node_modules/react4xp-runtime-nashornpolyfills/webpack.config.js 
+        --env.REACT4XP_CONFIG_FILE=[full path to a React4xp config JSON file] 
+        --env.SOURCE=[full path to a source nashornPolyfills file]
 ```
 
-You will need a JSON file that contains configuration constants for a React4XP project - `react4xpConfig.json` in the example above. You can use [react4xp-buildconstants](https://www.npmjs.com/package/react4xp-buildconstants) to easily generate it - handy for controlling an entire React4xp setup. 
+### How does that work?
 
-Point to the config file with a `REACT4XP_CONFIG_FILE` [webpack environment variable](https://webpack.js.org/guides/environment-variables/). `REACT4XP_CONFIG_FILE` must be an absolute path and filename to a valid JSON file. The JSON in the file must have a `BUILD_R4X` attribute at the JSON root, and `BUILD_R4X` must be an absolute path to a build folder. It also needs a `NASHORNPOLYFILLS_FILENAME` attribute, which should _not_ have a .js file extension. For example:
+In short, the React4xp runtime lib looks for a shared-constants JSON file `react4xp_constants.json` in its own (runtime/post-build) folder - usually `<projectRoot>/build/resources/main/lib/enonic/react4xp`. Inside this constants file, it looks for the constants `BUILD_R4X` and `NASHORNPOLYFILLS_FILENAME`. If the file `<BUILD_R4X>/<NASHORNPOLYFILLS_FILENAME>.js` exists, the standard nashorn polyfills will be _skipped_, and that file will be run by Nashorn instead prior to rendering React components. 
+
+`react4xp_constants.json` is not part of the runtime library, or this package - it's expected to be inserted into the lib folder in build-time. **The easiest way is to use [react4xp-buildconstants](https://www.npmjs.com/package/react4xp-buildconstants) to generate the constants file and let that steer the entire process.** The React4xp helper packages are tailored for this. _react4xp-buildconstants_ creates an "original" constants file with a location and name of your own choice, and copies it into the React4xp runtime lib folder, as `react4xp_constants.json`. 
+  
+Run Webpack with the included `webpack.config.js`, and use a `env.REACT4XP_CONFIG_FILE` [webpack environment variable](https://webpack.js.org/guides/environment-variables/) to point to the config file:
+
+## Examples
+
+```bash
+webpack --config node_modules/react4xp-runtime-nashornpolyfills/webpack.config.js --env.REACT4XP_CONFIG_FILE=/me/myproject/react4xpConfig.json --env.SOURCE=/me/myproject/myModifiedNashornPolyfills.es6
+```
+
+If `/me/myproject/react4xpConfig.json` contains the following attributes... 
 
 ```json
 { 
@@ -36,7 +44,27 @@ Point to the config file with a `REACT4XP_CONFIG_FILE` [webpack environment vari
 }
 ```
 
-This will produce the file `/me/myproject/build/nashornPolyfills.js`.
+...it will compile `/me/myproject/myModifiedNashornPolyfills.es6` into file `/me/myproject/build/nashornPolyfills.js`, which is run by React4xp as long as the copy `react4xp_constants.json` also has the same attributes. 
+
+In this example, the "original" `react4xpConfig.json` is used. You could also point to the copy `react4xp_constants.json` in the runtimelib build folder instead, but the build folder might be less stable! Mintaining your own config file(s) instead of just using _react4xp-buildconstants_ seems unecessarily... hardcore? 
+
+It's also possible to set the parameters directly with `env`, overriding the original config file or skipping it entirely (at least in this step - the copy is still required in runtime):
+
+```bash
+webpack --config .../webpack.config.js --env.SOURCE=/me/myproject/myModifiedNashornPolyfills.es6 --env.BUILD_R4X=/me/myproject/build/ --env.NASHORNPOLYFILLS_FILENAME=nashornPolyfills
+```
+
+
+## Attributes, constants, parameters
+
+See [react4xp-buildconstants](https://www.npmjs.com/package/react4xp-buildconstants) for more information about the constants, but the following is crucial:
+
+ - `BUILD_R4X`: the React4xp build folder. This is where the resulting nashornPolyfill JS file should be compiled into.
+
+ - `NASHORNPOLYFILLS_FILENAME`: the name of the output JS file - _without the '.js' file extension_.
+ 
+ - `SOURCE`: full path and name to your modified polyfills source file. If skipped, the included `nashornPolyfills.es6` is used instead.
+
 
 ## Contributions
 

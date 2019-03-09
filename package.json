@@ -1,22 +1,21 @@
 {
     "name": "react4xp-runtime-nashornpolyfills",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Source code and webpack compile script for produces a JS file which, when run in Nashorn, will polyfill Nashorn with some necessary functionality for running React4xp's server-side rendering of react components.",
     "main": "webpack.config.js",
     "files": [
-        "nashornPolyfills.js",
         "nashornPolyfills.es6",
         "webpack.config.js",
         "README.md"
     ],
     "scripts": {
-        "clean": "npm run cleanCompiled && npm run cleanRaw && npm run cleanWebpack",
-        "cleanCompiled": "rimraf ./nashornpolyfills.js",
+        "clean": "npm run cleanRaw && npm run cleanWebpack && npm run cleanTest",
         "cleanRaw": "rimraf ./nashornpolyfills.es6",
         "cleanWebpack": "rimraf ./webpack.config.js",
+        "cleanTest": "rimraf build/heisann.js",
         "copy": "copyfiles --flat src/*.* .",
-        "compile": "babel src -d . --ignore \"webpack.config.js\" --no-comments",
-        "prepublish": "npm run clean && npm run compile && npm run copy",
+        "test": "webpack --config webpack.config.js --env.SOURCE=$(pwd)/nashornPolyfills.es6 --env.BUILD_R4X=$(pwd)/build --env.NASHORNPOLYFILLS_FILENAME=heisann",
+        "prepublish": "npm run clean && npm run copy && npm run test",
         "postpublish": "npm run clean"
     },
     "repository": {
@@ -44,9 +43,10 @@
         "babel-cli": "^6.0.0",
         "babel-core": "^6.0.0",
         "babel-eslint": "^7.0.0",
-        "babel-polyfill": "6.0.0",
+        "babel-polyfill": "^6.26.0",
         "copyfiles": "^2.0.0",
-        "rimraf": "^2.0.0"},
+        "rimraf": "^2.0.0"
+    },
     "babel": {
         "presets": [
             "es2015",
