@@ -1,12 +1,13 @@
 {
     "name": "react4xp-runtime-nashornpolyfills",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "Source code and webpack compile script for produces a JS file which, when run in Nashorn, will polyfill Nashorn with some necessary functionality for running React4xp's server-side rendering of react components.",
     "main": "webpack.config.js",
     "files": [
         "nashornPolyfills.es6",
         "webpack.config.js",
-        "README.md"
+        "README.md",
+        "LICENSE"
     ],
     "scripts": {
         "clean": "npm run cleanRaw && npm run cleanWebpack && npm run cleanTest",
