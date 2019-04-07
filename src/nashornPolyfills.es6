@@ -3,7 +3,7 @@
 // Basic polyfilling (exports, global, window, process, console)
 // must be run hardcoded from inside the engine, for some reason:
 /*
-if (typeof exports === 'undefined') { var exports = {}; }
+if (typeof exports == 'undefined') { var exports = {}; }
 if (typeof global === 'undefined') { var global = this; }
 if (typeof window === 'undefined') { var window = this; }
 if (typeof process === 'undefined') { var process = {env:{}}; }
@@ -14,14 +14,15 @@ console.warn = print;
 console.error = print;
 */
 
+var context = typeof window !== 'undefined' ? window : global;
 
 // Polyfills Set and Map:
 var Map = require( 'es6-set-and-map' ).map;
 var Set = require( 'es6-set-and-map' ).set;
 (function(window) {
-    window.Map = Map;
-    window.Set = Set;
-} )(typeof window !== 'undefined' ? window : global);
+    if (typeof window.Map === 'undefined') window.Map = Map;
+    if (typeof window.Set === 'undefined') window.Set = Set;
+} )(context);
 
 
 
@@ -58,57 +59,67 @@ var Set = require( 'es6-set-and-map' ).set;
     phaser.arriveAndDeregister();
   };
 
-  context.setTimeout = function(fn, millis /* [, args...] */) {
-    var args = [].slice.call(arguments, 2, arguments.length);
+  if (typeof context.setTimeout === 'undefined') {
+      context.setTimeout = function(fn, millis /* [, args...] */) {
+          var args = [].slice.call(arguments, 2, arguments.length);
 
-    var phase = phaser.register();
-    var canceled = false;
-    timer.schedule(function() {
-      if (canceled) {
-        return;
-      }
+          var phase = phaser.register();
+          var canceled = false;
+          timer.schedule(function() {
+              if (canceled) {
+                  return;
+              }
 
-      try {
-        fn.apply(context, args);
-      } catch (e) {
-        print(e);
-      } finally {
-        onTaskFinished();
-        popTimeout();
-      }
-    }, millis);
+              try {
+                  fn.apply(context, args);
+              } catch (e) {
+                  print(e);
+              } finally {
+                  onTaskFinished();
+                  popTimeout();
+              }
+          }, millis);
 
-    pushTimeout();
+          pushTimeout();
 
-    return function() {
-      onTaskFinished();
-      canceled = true;
-      popTimeout();
-    };
-  };
+          return function() {
+              onTaskFinished();
+              canceled = true;
+              popTimeout();
+          };
+      };
+  }
 
-  context.clearTimeout = function(cancel) {
-    cancel();
-  };
+  if (typeof context.clearTimeout === 'undefined') {
+      context.clearTimeout = function(cancel) {
+          cancel();
+      };
+  }
 
-  context.setInterval = function(fn, delay /* [, args...] */) {
-    var args = [].slice.call(arguments, 2, arguments.length);
+  if (typeof context.setInterval === 'undefined') {
+      context.setInterval = function(fn, delay /* [, args...] */) {
+          var args = [].slice.call(arguments, 2, arguments.length);
 
-    var cancel = null;
+          var cancel = null;
 
-    var loop = function() {
-      cancel = context.setTimeout(loop, delay);
-      fn.apply(context, args);
-    };
+          var loop = function() {
+              cancel = context.setTimeout(loop, delay);
+              fn.apply(context, args);
+          };
 
-    cancel = context.setTimeout(loop, delay);
-    return function() {
-      cancel();
-    };
-  };
+          cancel = context.setTimeout(loop, delay);
+          return function() {
+              cancel();
+          };
+      };
+  }
 
-  context.clearInterval = function(cancel) {
-    cancel();
-  };
+  if (typeof context.clearInterval === 'undefined') {
+      context.clearInterval = function(cancel) {
+          cancel();
+      };
+  }
 
-})(typeof window !== 'undefined' ? window : global);
+})(context);
+
+context.setTimeout(function(){}, 1);
