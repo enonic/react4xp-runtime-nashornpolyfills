@@ -2,7 +2,7 @@
 
 Builds a JS file ready to run in Nashorn, which polyfills the Nashorn engine with some JS functionality needed for server-side React rendering. Notably: Set, Map and setTimeout, and related. 
 
-The [React4xp runtime library](https://github.com/enonic/lib-react4xp-runtime) already includes a hook to this library, handling its own polyfilling. 
+The [React4xp runtime library](https://github.com/enonic/lib-react4xp) already includes a hook to this library, handling its own polyfilling. 
 
 However, should you need to **adjust or add your own polyfilling**, you can use the included `nashornPolyfills.es6` file as a template, and follow the description below to _override and replace_ React4xp's own Nashorn polyfill. 
  
