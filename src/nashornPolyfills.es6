@@ -7,11 +7,13 @@ if (typeof exports == 'undefined') { var exports = {}; }
 if (typeof global === 'undefined') { var global = this; }
 if (typeof window === 'undefined') { var window = this; }
 if (typeof process === 'undefined') { var process = {env:{}}; }
-if (typeof console === 'undefined') { var console = {}; }
-console.debug = print;
-console.log = print;
-console.warn = print;
-console.error = print;
+if (typeof console === 'undefined') {
+    var console = {};
+    console.debug = print;
+    console.log = print;
+    console.warn = print;
+    console.error = print;
+}
 */
 
 var context = typeof window !== 'undefined' ? window : global;

@@ -6,16 +6,18 @@ module.exports = env => {
     env = env || {};
 
     let BUILD_R4X = env.BUILD_R4X;
-    let BUILD_ENV = env.BUILD_ENV || "development";
+    let BUILD_ENV = env.BUILD_ENV || "production";
     let NASHORNPOLYFILLS_FILENAME = env.NASHORNPOLYFILLS_FILENAME;
 
-    const SOURCE = env.SOURCE || path.join(__dirname, 'nashornPolyfills.es6');
+    let NASHORNPOLYFILLS_SOURCE = env.NASHORNPOLYFILLS_SOURCE; // || path.join(__dirname, 'nashornPolyfills.es6');
 
     if (env.REACT4XP_CONFIG_FILE) {
         try {
-            const config = require(env.REACT4XP_CONFIG_FILE);
+            // eslint-disable-next-line import/no-dynamic-require, global-require
+            config = require(path.join(process.cwd(), env.REACT4XP_CONFIG_FILE));
             BUILD_R4X = BUILD_R4X || config.BUILD_R4X;
             BUILD_ENV = BUILD_ENV || config.BUILD_ENV;
+            NASHORNPOLYFILLS_SOURCE = NASHORNPOLYFILLS_SOURCE || config.NASHORNPOLYFILLS_SOURCE
             NASHORNPOLYFILLS_FILENAME = config.NASHORNPOLYFILLS_FILENAME;
         } catch (e) {}
     }
@@ -29,10 +31,10 @@ module.exports = env => {
     }
 
     return {
-        mode: BUILD_ENV || 'production',
+        mode: BUILD_ENV,
 
         entry: {
-            [NASHORNPOLYFILLS_FILENAME]: SOURCE,
+            [NASHORNPOLYFILLS_FILENAME]: NASHORNPOLYFILLS_SOURCE,
         },
 
         output: {
