@@ -17,13 +17,17 @@ module.exports = env => {
             config = require(path.join(process.cwd(), env.REACT4XP_CONFIG_FILE));
             BUILD_R4X = BUILD_R4X || config.BUILD_R4X;
             BUILD_ENV = BUILD_ENV || config.BUILD_ENV;
-            NASHORNPOLYFILLS_SOURCE = NASHORNPOLYFILLS_SOURCE || config.NASHORNPOLYFILLS_SOURCE
+            NASHORNPOLYFILLS_SOURCE = NASHORNPOLYFILLS_SOURCE || config.NASHORNPOLYFILLS_SOURCE;
             NASHORNPOLYFILLS_FILENAME = config.NASHORNPOLYFILLS_FILENAME;
         } catch (e) {}
     }
 
     if (((BUILD_R4X || "") + "").trim() === "") {
         throw Error("Can't build nashorn polyfills without a build path (BUILD_R4X)");
+    }
+
+    if (((NASHORNPOLYFILLS_SOURCE || "") + "").trim() === "") {
+        throw Error("Won't build nashorn polyfills without a source filename (NASHORNPOLYFILLS_SOURCE)");
     }
 
     if (((NASHORNPOLYFILLS_FILENAME || "") + "").trim() === "") {
@@ -34,7 +38,7 @@ module.exports = env => {
         mode: BUILD_ENV,
 
         entry: {
-            [NASHORNPOLYFILLS_FILENAME]: NASHORNPOLYFILLS_SOURCE,
+            [NASHORNPOLYFILLS_FILENAME]: path.join(process.cwd(), NASHORNPOLYFILLS_SOURCE),
         },
 
         output: {

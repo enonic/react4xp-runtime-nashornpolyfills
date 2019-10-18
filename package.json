@@ -1,6 +1,6 @@
 {
     "name": "react4xp-runtime-nashornpolyfills",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "description": "Source code and webpack compile script for produces a JS file which, when run in Nashorn, will polyfill Nashorn with some necessary functionality for running React4xp's server-side rendering of react components.",
     "main": "webpack.config.js",
     "files": [
@@ -13,10 +13,13 @@
         "clean": "npm run cleanRaw && npm run cleanWebpack && npm run cleanTest",
         "cleanRaw": "rimraf ./nashornpolyfills.es6",
         "cleanWebpack": "rimraf ./webpack.config.js",
-        "cleanTest": "rimraf test/output/testPolyfilled.js",
+        "cleanTest": "rimraf test/output",
         "copy": "copyfiles --flat src/*.* .",
         "pretest": "npm run copy",
-        "test": "webpack --config webpack.config.js --env.NASHORNPOLYFILLS_SOURCE=$(pwd)/test/testPolyfiller.es6 --env.BUILD_ENV=development --env.BUILD_R4X=$(pwd)/test/output --env.NASHORNPOLYFILLS_FILENAME=testPolyfilled && node $(pwd)/test/output/testPolyfilled.js",
+        "test": "npm run test:cli && npm run cleanTest && npm run makeconstants && npm run test:constants",
+        "test:cli": "webpack --config webpack.config.js --env.NASHORNPOLYFILLS_SOURCE=test/testPolyfiller.es6 --env.BUILD_ENV=development --env.BUILD_R4X=$(pwd)/test/output --env.NASHORNPOLYFILLS_FILENAME=testPolyfilled && node $(pwd)/test/output/testPolyfilled.js",
+        "test:constants": "webpack --config webpack.config.js --env.REACT4XP_CONFIG_FILE=test/output/testConfig.json && node test/output/testPolyfilled.js",
+        "makeconstants": "node_modules/react4xp-buildconstants/cli.js $(pwd) \"{\\\"BUILD_ENV\\\": \\\"development\\\",\\\"outputFileName\\\": \\\"test/output/testConfig.json\\\",\\\"NASHORNPOLYFILLS_SOURCE\\\": \\\"test/testPolyfiller.es6\\\",\\\"NASHORNPOLYFILLS_FILENAME\\\": \\\"testPolyfilled\\\",\\\"SUBFOLDER_BUILD_MAIN\\\": \\\"test/output\\\", \\\"R4X_TARGETSUBDIR\\\": \\\"\\\", \\\"overwriteConstantsFile\\\":\\\"true\\\"}\"",
         "prepublish": "npm run clean && npm run copy && npm run test",
         "postpublish": "npm run clean"
     },
@@ -50,9 +53,10 @@
         "babel-preset-es2015": "^6.24.1",
         "babel-preset-stage-0": "^6.24.1",
         "copyfiles": "^2.0.0",
+        "react4xp-buildconstants": "^0.7.6",
         "rimraf": "^2.0.0",
         "webpack": "^4.29.6",
-        "webpack-cli": "^3.3.0"
+        "webpack-cli": "^3.3.9"
     },
     "babel": {
         "presets": [
