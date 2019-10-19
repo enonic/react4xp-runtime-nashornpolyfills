@@ -8,6 +8,7 @@ module.exports = env => {
     let BUILD_R4X = env.BUILD_R4X;
     let BUILD_ENV = env.BUILD_ENV || "production";
     let NASHORNPOLYFILLS_FILENAME = env.NASHORNPOLYFILLS_FILENAME;
+    let verbose = env.verbose;
 
     let NASHORNPOLYFILLS_SOURCE = env.NASHORNPOLYFILLS_SOURCE; // || path.join(__dirname, 'nashornPolyfills.es6');
 
@@ -19,19 +20,24 @@ module.exports = env => {
             BUILD_ENV = BUILD_ENV || config.BUILD_ENV;
             NASHORNPOLYFILLS_SOURCE = NASHORNPOLYFILLS_SOURCE || config.NASHORNPOLYFILLS_SOURCE;
             NASHORNPOLYFILLS_FILENAME = config.NASHORNPOLYFILLS_FILENAME;
+            verbose = verbose || config.verbose;
         } catch (e) {}
     }
 
-    if (((BUILD_R4X || "") + "").trim() === "") {
-        throw Error("Can't build nashorn polyfills without a build path (BUILD_R4X)");
+    if (((NASHORNPOLYFILLS_SOURCE || "") + "").trim() === "") {
+        throw Error("react4xp-runtime-nashornpolyfills: no source filename is set (NASHORNPOLYFILLS_SOURCE). Check react4xp-runtime-nashornpolyfills build setup, for env parameters" + (env.REACT4XP_CONFIG_FILE ? (" or in the master config file (" + env.REACT4XP_CONFIG_FILE + ", usually built by react4xp-buildconstants)") : "") + ".");
     }
 
-    if (((NASHORNPOLYFILLS_SOURCE || "") + "").trim() === "") {
-        throw Error("Won't build nashorn polyfills without a source filename (NASHORNPOLYFILLS_SOURCE)");
+    if (((BUILD_R4X || "") + "").trim() === "") {
+        throw Error("Can't build nashorn polyfills from source (" + NASHORNPOLYFILLS_SOURCE + "): missing build path (BUILD_R4X). Check react4xp-runtime-nashornpolyfills build setup, for env parameters" + (env.REACT4XP_CONFIG_FILE ? (" or in the master config file (" + env.REACT4XP_CONFIG_FILE + ", usually built by react4xp-buildconstants)") : "") + ".");
     }
 
     if (((NASHORNPOLYFILLS_FILENAME || "") + "").trim() === "") {
-        throw Error("Won't build nashorn polyfills without a target filename (NASHORNPOLYFILLS_FILENAME)");
+        throw Error("Can't build nashorn polyfills from source (" + NASHORNPOLYFILLS_SOURCE + "): missing target filename (NASHORNPOLYFILLS_FILENAME). Check react4xp-runtime-nashornpolyfills build setup, for env parameters" + (env.REACT4XP_CONFIG_FILE ? (" or in the master config file (" + env.REACT4XP_CONFIG_FILE + ", usually built by react4xp-buildconstants)") : "") + ".");
+    }
+
+    if (verbose) {
+        console.log("Adding custom nashorn polyfills: compiling " + path.join(process.cwd(), NASHORNPOLYFILLS_SOURCE) + " --> " + path.join(BUILD_R4X, NASHORNPOLYFILLS_FILENAME));
     }
 
     return {
