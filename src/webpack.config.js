@@ -63,6 +63,14 @@ module.exports = env => {
                     loader: 'babel-loader',
                     query: {
                         compact: BUILD_ENV !== 'development',
+                        presets: [
+                            "@babel/preset-react",
+                            "@babel/preset-env"
+                        ],
+                        plugins: [
+                            "@babel/plugin-transform-arrow-functions",
+                            "@babel/plugin-proposal-object-rest-spread"
+                        ]
                     },
                 },
             ],
