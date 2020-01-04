@@ -1,6 +1,6 @@
 {
     "name": "react4xp-runtime-nashornpolyfills",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "Source code and webpack compile script for produces a JS file which, when run in Nashorn, will polyfill Nashorn with some necessary functionality for running React4xp's server-side rendering of react components.",
     "main": "webpack.config.js",
     "files": [
@@ -44,7 +44,7 @@
         "@babel/plugin-transform-arrow-functions": "^7",
         "@babel/preset-env": "^7",
         "@babel/preset-react": "^7",
-        "babel-register": "*"
+        "@babel/register": "*"
     },
     "devDependencies": {
         "@babel/cli": "^7.7.7",
