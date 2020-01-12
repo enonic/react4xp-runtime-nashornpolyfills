@@ -19,7 +19,7 @@
         "test": "npm run test:cli && npm run cleanTest && npm run makeconstants && npm run test:constants",
         "test:cli": "webpack --config webpack.config.js --env.NASHORNPOLYFILLS_SOURCE=test/testPolyfiller.es6 --env.BUILD_ENV=development --env.BUILD_R4X=$(pwd)/test/output --env.NASHORNPOLYFILLS_FILENAME=testPolyfilled && node $(pwd)/test/output/testPolyfilled.js",
         "test:constants": "webpack --config webpack.config.js --env.REACT4XP_CONFIG_FILE=test/output/testConfig.json && node test/output/testPolyfilled.js",
-        "makeconstants": "node_modules/react4xp-buildconstants/cli.js $(pwd) \"{\\\"BUILD_ENV\\\": \\\"development\\\",\\\"outputFileName\\\": \\\"test/output/testConfig.json\\\",\\\"NASHORNPOLYFILLS_SOURCE\\\": \\\"test/testPolyfiller.es6\\\",\\\"NASHORNPOLYFILLS_FILENAME\\\": \\\"testPolyfilled\\\",\\\"SUBFOLDER_BUILD_MAIN\\\": \\\"test/output\\\", \\\"R4X_TARGETSUBDIR\\\": \\\"\\\", \\\"overwriteConstantsFile\\\":\\\"true\\\"}\"",
+        "makeconstants": "node_modules/react4xp-buildconstants/bin/cli.js $(pwd) \"{\\\"BUILD_ENV\\\": \\\"development\\\",\\\"outputFileName\\\": \\\"test/output/testConfig.json\\\",\\\"NASHORNPOLYFILLS_SOURCE\\\": \\\"test/testPolyfiller.es6\\\",\\\"NASHORNPOLYFILLS_FILENAME\\\": \\\"testPolyfilled\\\",\\\"SUBFOLDER_BUILD_MAIN\\\": \\\"test/output\\\", \\\"R4X_TARGETSUBDIR\\\": \\\"\\\", \\\"overwriteConstantsFile\\\":\\\"true\\\"}\"",
         "prepublish": "npm run clean && npm run copy && npm run test",
         "postpublish": "npm run clean"
     },
@@ -56,7 +56,7 @@
         "@babel/register": "^7.7.7",
         "babel-loader": "^8.0.6",
         "copyfiles": "^2.0.0",
-        "react4xp-buildconstants": "^0.7.6",
+        "react4xp-buildconstants": "^0.8.0",
         "rimraf": "^2.0.0",
         "webpack": "^4.29.6",
         "webpack-cli": "^3.3.9"
