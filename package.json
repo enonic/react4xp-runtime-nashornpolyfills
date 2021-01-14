@@ -57,7 +57,7 @@
         "babel-loader": "^8.0.6",
         "copyfiles": "^2.0.0",
         "react4xp-buildconstants": "0.8.0",
-        "rimraf": "^2.0.0",
+        "rimraf": "^3.0.2",
         "webpack": "^4.29.6",
         "webpack-cli": "^3.3.9"
     },
